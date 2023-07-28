@@ -12,16 +12,35 @@ export const getUserById = (id) => {
 };
 
 export const createUser = (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name } = req.params;
+
   if (!email || !password || !name) {
     return res
       .status(400)
-      .json({ error: "email, password and name son valores necesarios" });
+      .json({ error: "Todos los campos son obligatorios." });
   }
 
-  const newUser = { id: users.lenght + 1, name, email, password };
+  // Verificamos si el email ya existe en la lista de usuarios
+  const existingUser = users.find((user) => user.email === email);
+  if (existingUser) {
+    return res.status(409).json({ error: "El email ya está registrado." });
+  }
+
+  // Generamos un nuevo ID para el usuario
+  const id = users.length + 1;
+
+  // Creamos el nuevo usuario
+  const newUser = {
+    id,
+    name,
+    email,
+    password,
+  };
+
+  // Agregamos el nuevo usuario a la lista
   users.push(newUser);
-  res.status(201).json(newUser);
+
+  res.json(newUser);
 };
 
 // module.exports = { getUsers, getUserById };
