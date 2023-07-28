@@ -3,7 +3,7 @@ import { router } from "./src/routers/router.js";
 import "dotenv/config";
 //require("dotenv").config();
 
-if (!process.env.PORT || process.env.PORT.trim() === "") {
+if (process.env.PORT && process.env.PORT.trim() === "") {
   console.error(
     "La variable de entorno PORT no está definida en el archivo .env o está vacía."
   );

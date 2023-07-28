@@ -40,7 +40,7 @@ export const createUser = (req, res) => {
   // Agregamos el nuevo usuario a la lista
   users.push(newUser);
 
-  res.json(newUser);
+  res.status(201).json(newUser);
 };
 
 // module.exports = { getUsers, getUserById };
