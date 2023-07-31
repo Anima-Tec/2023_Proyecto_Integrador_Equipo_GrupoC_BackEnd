@@ -7,8 +7,24 @@ export const getUsers = (req, res) => {
   res.json(users);
 };
 
-export const getUserById = (id) => {
+const getUserById = (id) => {
   return users.find((user) => user.id === id);
+};
+
+export const getUserProfile = (req, res) => {
+  const userId = parseInt(req.params.id);
+
+  if (!userId) {
+    return res.status(400).json({ error: "ID invalida" });
+  }
+
+  const user = getUserById(userId);
+
+  if (!user) {
+    return res.status(404).json({ error: "Usuario no encontrado" });
+  }
+
+  res.json(user);
 };
 
 export const createUser = (req, res) => {
@@ -22,10 +38,14 @@ export const createUser = (req, res) => {
 
   // Verificamos si el email ya existe en la lista de usuarios
   const existingUser = users.find((user) => user.email === email);
+
   if (existingUser) {
     return res.status(409).json({ error: "El email ya está registrado." });
   }
 
+  if (!email.includes("@") || password.length < 8) {
+    return res.status(400).json({ error: "Invalid email or password." });
+  }
   // Generamos un nuevo ID para el usuario
   const id = users.length + 1;
 
@@ -43,5 +63,14 @@ export const createUser = (req, res) => {
   res.status(201).json(newUser);
 };
 
-// module.exports = { getUsers, getUserById };
-// module.exports = { createUser };
+export const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.findIndex((user) => user.id === id);
+
+  if (user === -1) {
+    res.status(404).json({ error: "Usuario no encontrado" });
+  }
+
+  users.splice(user, 1);
+  res.status(200).json({ message: "Usuario eliminado correctamente" });
+};
