@@ -1,3 +1,6 @@
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+
 const users = [
   { id: 1, name: "Jhon Doe", email: "jhon@gmail.com", password: "12345678" },
   { id: 2, name: "Jane Doe", email: "jane@gmail.com", password: "abcdefg" },
@@ -54,6 +57,7 @@ export const createUser = (req, res) => {
   if (password.length < 8) {
     return res.status(400).json({ error: "contraseña incorrecta" });
   }
+
   // Generamos un nuevo ID para el usuario
   const id = users.length + 1;
 
@@ -73,6 +77,7 @@ export const createUser = (req, res) => {
 
 export const deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
+
   //Se busca el usuario
   const user = users.findIndex((user) => user.id === id);
 
