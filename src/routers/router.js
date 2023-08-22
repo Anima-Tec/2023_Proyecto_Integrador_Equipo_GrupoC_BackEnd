@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/users", getUsers);
 router.post("/users/create/:email/:password/:name", createUser);
 router.delete("/users/delete/:id", deleteUser);
-router.get("/profile/:id", getUserProfile);
+router.get("/users/profile/:id", getUserProfile);
 router.get("/products", getProducts);
 
 export { router };

@@ -1,3 +1,6 @@
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+
 const users = [
   { id: 1, name: "Jhon Doe", email: "jhon@gmail.com", password: "12345678" },
   { id: 2, name: "Jane Doe", email: "jane@gmail.com", password: "abcdefg" },
@@ -14,17 +17,21 @@ const getUserById = (id) => {
 export const getUserProfile = (req, res) => {
   const userId = parseInt(req.params.id);
 
+  //Se consulta si el valor que se ingreso en correcto
   if (!userId) {
     return res.status(400).json({ error: "ID invalida" });
   }
 
+  //Se busca el usuario
   const user = getUserById(userId);
 
+  //Se confirma si el usuario existe
   if (!user) {
     return res.status(404).json({ error: "Usuario no encontrado" });
   }
 
-  res.json(user);
+  //Devuele los datos del usuario
+  res.json(`name: ${user.name} email: ${user.email}`);
 };
 
 export const createUser = (req, res) => {
@@ -43,9 +50,14 @@ export const createUser = (req, res) => {
     return res.status(409).json({ error: "El email ya está registrado." });
   }
 
-  if (!email.includes("@") || password.length < 8) {
-    return res.status(400).json({ error: "Invalid email or password." });
+  if (!email.includes("@")) {
+    return res.status(400).json({ error: "email invalido" });
   }
+
+  if (password.length < 8) {
+    return res.status(400).json({ error: "contraseña incorrecta" });
+  }
+
   // Generamos un nuevo ID para el usuario
   const id = users.length + 1;
 
@@ -65,12 +77,16 @@ export const createUser = (req, res) => {
 
 export const deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
+
+  //Se busca el usuario
   const user = users.findIndex((user) => user.id === id);
 
+  //Se confirma que exista en la base de datos
   if (user === -1) {
     res.status(404).json({ error: "Usuario no encontrado" });
   }
 
+  //Se elimina el usuario
   users.splice(user, 1);
   res.status(200).json({ message: "Usuario eliminado correctamente" });
 };
