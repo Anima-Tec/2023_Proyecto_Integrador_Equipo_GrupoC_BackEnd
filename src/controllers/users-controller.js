@@ -47,7 +47,7 @@ export const createUser = (req, res) => {
   const existingUser = users.find((user) => user.email === email);
 
   if (existingUser) {
-    return res.status(409).json({ error: "El email ya está registrado." });
+    return res.status(403).json({ error: "El email ya está registrado." });
   }
 
   if (!email.includes("@")) {
