@@ -1,10 +1,10 @@
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 
-const products = [
-  { id: 1, name: "Product 1", price: 10.99 },
-  { id: 2, name: "Product 2", price: 19.99 },
-];
+// const products = [
+//   { id: 1, name: "Product 1", price: 10.99 },
+//   { id: 2, name: "Product 2", price: 19.99 },
+// ];
 
 export const getProducts = (req, res) => {
   res.json(products);
@@ -16,6 +16,7 @@ export const createProduct = async (req, res) => {
   if (!name || !price) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
+
   const newProduct = {
     name,
     price: parseFloat(price),
