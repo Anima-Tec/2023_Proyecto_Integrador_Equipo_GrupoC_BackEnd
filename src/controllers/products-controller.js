@@ -1,27 +1,46 @@
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
-// const products = [
-//   { id: 1, name: "Product 1", price: 10.99 },
-//   { id: 2, name: "Product 2", price: 19.99 },
-// ];
-
-export const getProducts = (req, res) => {
-  res.json(products);
+export const getProducts = async (req, res) => {
+  try {
+    const products = await prisma.product.findMany();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado conseguir la información" });
+  }
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price } = req.params;
+  const { name, price, type } = req.body;
 
-  if (!name || !price) {
-    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  if (!name || !price || !type) {
+    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
-  const newProduct = {
-    name,
-    price: parseFloat(price),
-  };
+  try {
+    const newProduct = await prisma.product.create({
+      data: {
+        name,
+        price: parseFloat(price),
+        type,
+      },
+    });
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado crear el producto" });
+  }
 
-  products.push(newProduct);
-  res.status(201).json(newProduct);
+  // const { name, price } = req.params;
+
+  // if (!name || !price) {
+  //   return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  // }
+
+  // const newProduct = {
+  //   name,
+  //   price: parseFloat(price),
+  // };
+
+  // products.push(newProduct);
+  // res.status(201).json(newProduct);
 };
