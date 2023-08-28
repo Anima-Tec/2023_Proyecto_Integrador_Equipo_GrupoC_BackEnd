@@ -7,6 +7,7 @@ import { createProduct } from "../controllers/products-controller.js";
 import { deleteUser } from "../controllers/users-controller.js";
 
 const router = express.Router();
+
 // rutas para user-controller
 router.get("/users", getUsers);
 router.post("/users/create", createUser);
