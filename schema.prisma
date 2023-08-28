@@ -21,4 +21,10 @@ model Product {
   name  String
   type String 
   price Float
+  description String
+}
+
+model Coment {
+  id Int @id @default(autoincrement())
+  test String
 }
