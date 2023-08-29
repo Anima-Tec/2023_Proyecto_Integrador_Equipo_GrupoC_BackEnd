@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.User.findMany();
     res.json(users);
   } catch (error) {
     res
@@ -27,7 +27,7 @@ export const getUserProfile = async (req, res) => {
   // const user = getUserById(userId);
 
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.User.findUnique({
       where: {
         id: userId,
       },
@@ -44,13 +44,24 @@ export const getUserProfile = async (req, res) => {
 
 export const createUser = async (req, res) => {
   // const { email, password, name } = req.params;
-  const { email, password, name } = req.body;
+  const { name, surname, email, contrasena, edad, celular } = req.body;
+
+  parseInt(edad);
+  parseInt(celular);
+
+  if (!name || !surname || !email || !contrasena || !edad || !celular) {
+    return res.status(400).json({ error: "Todos los campos son requeridos" });
+  }
+
   try {
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.User.create({
       data: {
-        email,
-        password,
         name,
+        surname,
+        email,
+        contrasena,
+        edad,
+        celular,
       },
     });
 
@@ -69,7 +80,7 @@ export const deleteUserById = async (req, res) => {
   }
 
   try {
-    const deleteUser = await prisma.user.delete({
+    const deleteUser = await prisma.User.delete({
       where: {
         id: userId,
       },

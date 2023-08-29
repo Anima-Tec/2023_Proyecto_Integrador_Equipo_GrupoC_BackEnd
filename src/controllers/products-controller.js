@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prisma.Prenda.findMany();
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "No se a logrado conseguir la información" });
@@ -18,7 +18,7 @@ export const createProduct = async (req, res) => {
   }
 
   try {
-    const newProduct = await prisma.product.create({
+    const newProduct = await prisma.Prenda.create({
       data: {
         name,
         price: parseFloat(price),
