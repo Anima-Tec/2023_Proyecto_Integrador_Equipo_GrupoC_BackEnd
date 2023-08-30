@@ -17,7 +17,7 @@ export const getUsers = async (req, res) => {
 // };
 
 export const getUserProfile = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = parseInt(req.body.id);
 
   //Se consulta si el valor que se ingreso en correcto
   if (isNaN(userId) || userId < 1) {
@@ -46,9 +46,6 @@ export const createUser = async (req, res) => {
   // const { email, password, name } = req.params;
   const { name, surname, email, contrasena, edad, celular } = req.body;
 
-  parseInt(edad);
-  parseInt(celular);
-
   if (!name || !surname || !email || !contrasena || !edad || !celular) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
@@ -73,16 +70,16 @@ export const createUser = async (req, res) => {
 
 export const deleteUserById = async (req, res) => {
   // const id = parseInt(req.params.id);
-  const userId = parseInt(req.params.id);
-
-  if (isNaN(userId) || userId < 1) {
+  const id = parseInt(req.body.id);
+  parseInt(id);
+  if (isNaN(id) || id < 1) {
     return res.status(400).json({ error: "Id invalida" });
   }
 
   try {
     const deleteUser = await prisma.User.delete({
       where: {
-        id: userId,
+        id: id,
       },
     });
 

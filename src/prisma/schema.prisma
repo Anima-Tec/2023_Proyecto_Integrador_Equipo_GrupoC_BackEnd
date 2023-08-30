@@ -18,6 +18,7 @@ model User {
 
   compras Compra[]
   ventas Vende[]
+  donaciones Dona[]
 }
 
 model Prenda {
@@ -29,6 +30,7 @@ model Prenda {
 
   compras Compra[]
   ventas Vende[]
+  categorias Categoria[]
 }
 
 model Comment {
@@ -39,11 +41,15 @@ model Comment {
 model Articulo{
   id Int @id @default(autoincrement())
   descripcion String
+
+  donaciones Dona[]
 }
 
 model Categoria{
   id Int @id @default(autoincrement())
   nombre String
+  prenda Prenda @relation(fields: [idPrenda], references: id)
+  idPrenda Int
 }
 
 model Compra {
@@ -65,4 +71,14 @@ model Vende {
 
   user User @relation(fields: [idUser], references: id)
   prenda Prenda @relation(fields: [idPrenda], references: id)
+}
+
+model Dona{
+  id Int @id @default(autoincrement())
+  fecha DateTime
+  idUser Int @unique
+  idArticulo Int @unique
+
+  user User @relation(fields: [idUser], references: id)
+  articulo Articulo @relation(fields: [idArticulo], references: id)
 }

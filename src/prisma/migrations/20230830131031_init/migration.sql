@@ -43,6 +43,7 @@ CREATE TABLE `Articulo` (
 CREATE TABLE `Categoria` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nombre` VARCHAR(191) NOT NULL,
+    `idPrenda` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -72,6 +73,21 @@ CREATE TABLE `Vende` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `Dona` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fecha` DATETIME(3) NOT NULL,
+    `idUser` INTEGER NOT NULL,
+    `idArticulo` INTEGER NOT NULL,
+
+    UNIQUE INDEX `Dona_idUser_key`(`idUser`),
+    UNIQUE INDEX `Dona_idArticulo_key`(`idArticulo`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Categoria` ADD CONSTRAINT `Categoria_idPrenda_fkey` FOREIGN KEY (`idPrenda`) REFERENCES `Prenda`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- AddForeignKey
 ALTER TABLE `Compra` ADD CONSTRAINT `Compra_idUser_fkey` FOREIGN KEY (`idUser`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -83,3 +99,9 @@ ALTER TABLE `Vende` ADD CONSTRAINT `Vende_idUser_fkey` FOREIGN KEY (`idUser`) RE
 
 -- AddForeignKey
 ALTER TABLE `Vende` ADD CONSTRAINT `Vende_idPrenda_fkey` FOREIGN KEY (`idPrenda`) REFERENCES `Prenda`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Dona` ADD CONSTRAINT `Dona_idUser_fkey` FOREIGN KEY (`idUser`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Dona` ADD CONSTRAINT `Dona_idArticulo_fkey` FOREIGN KEY (`idArticulo`) REFERENCES `Articulo`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

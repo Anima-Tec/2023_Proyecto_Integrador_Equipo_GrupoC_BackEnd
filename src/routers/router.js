@@ -11,8 +11,8 @@ const router = express.Router();
 // rutas para user-controller
 router.get("/users", getUsers);
 router.post("/users/create", createUser);
-router.delete("/users/delete/:id", deleteUserById);
-router.get("/users/profile/:id", getUserProfile);
+router.delete("/users/delete", deleteUserById);
+router.get("/users/profile", getUserProfile);
 
 // rutas para products-controller
 router.get("/products", getProducts);

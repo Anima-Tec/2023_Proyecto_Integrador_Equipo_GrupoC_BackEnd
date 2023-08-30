@@ -11,18 +11,19 @@ export const getProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price, type } = req.body;
+  const { nombre, descripcion, stock, precio } = req.body;
 
-  if (!name || !price || !type) {
+  if (!nombre || !descripcion || !stock || !precio) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
   try {
     const newProduct = await prisma.Prenda.create({
       data: {
-        name,
-        price: parseFloat(price),
-        type,
+        nombre,
+        descripcion,
+        stock,
+        precio,
       },
     });
     res.status(201).json(newProduct);
