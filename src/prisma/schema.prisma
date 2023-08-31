@@ -31,6 +31,7 @@ model Prenda {
   compras Compra[]
   ventas Vende[]
   categorias Categoria[]
+ 
 }
 
 model Comment {
@@ -56,8 +57,9 @@ model Compra {
   id Int @id @default(autoincrement())
   idPrenda Int @unique
   idUser Int @unique
+  idComment Int @unique
   fechaCompra DateTime
-  
+
   user User @relation(fields: [idUser], references: id)
   prenda Prenda @relation(fields: [idPrenda], references: id)
 }
