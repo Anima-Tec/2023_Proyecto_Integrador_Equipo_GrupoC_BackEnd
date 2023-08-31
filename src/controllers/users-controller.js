@@ -67,36 +67,37 @@ export const createUser = async (req, res) => {
     res.status(500).json({ error: "No se logro crear el usuario" });
   }
 
-export const createUser = (req, res) => {
-  const { email, password, name } = req.params;
+  export const createUser = (req, res) => {
+    const { email, password, name } = req.params;
 
-  if (!email || !password || !name) {
-    return res
-      .status(400)
-      .json({ error: "Todos los campos son obligatorios." });
-  }
+    if (!email || !password || !name) {
+      return res
+        .status(400)
+        .json({ error: "Todos los campos son obligatorios." });
+    }
 
-  // Verificamos si el email ya existe en la lista de usuarios
-  const existingUser = users.find((user) => user.email === email);
-  if (existingUser) {
-    return res.status(409).json({ error: "El email ya está registrado." });
-  }
+    // Verificamos si el email ya existe en la lista de usuarios
+    const existingUser = users.find((user) => user.email === email);
+    if (existingUser) {
+      return res.status(409).json({ error: "El email ya está registrado." });
+    }
 
-  // Generamos un nuevo ID para el usuario
-  const id = users.length + 1;
+    // Generamos un nuevo ID para el usuario
+    const id = users.length + 1;
 
-  // Creamos el nuevo usuario
-  const newUser = {
-    id,
-    name,
-    email,
-    password,
+    // Creamos el nuevo usuario
+    const newUser = {
+      id,
+      name,
+      email,
+      password,
+    };
+
+    // Agregamos el nuevo usuario a la lista
+    users.push(newUser);
+
+    res.status(201).json(newUser);
   };
-
-  // Agregamos el nuevo usuario a la lista
-  users.push(newUser);
-
-  res.status(201).json(newUser);
 };
 
 export const deleteUserById = async (req, res) => {
@@ -118,5 +119,4 @@ export const deleteUserById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
-  //Se elimina el usuario
 };
