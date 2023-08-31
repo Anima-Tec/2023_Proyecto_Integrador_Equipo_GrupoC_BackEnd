@@ -2,23 +2,32 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createComment = async (req, res) => {
-  const { productId } = req.params;
-  const { text } = req.body;
+  const text = req.body.text;
 
   if (!text) {
     return res.status(400).json({ error: "El campo de texto es requerido" });
   }
 
   try {
-    const newComment = await prisma.commment.create({
+    const newComment = await prisma.Comment.create({
       data: {
         text,
-        productId: parseInt(productId),
       },
     });
 
-    res.status(200).json(newComment);
+    res.status(201).json(newComment);
   } catch (error) {
     res.status(500).json({ error: "No se logrado crear el comentario" });
+  }
+};
+
+export const getComments = async (req, res) => {
+  try {
+    const data = await prisma.Comment.findMany();
+    res.json(data);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error en el servidor, no se logro obtener" });
   }
 };

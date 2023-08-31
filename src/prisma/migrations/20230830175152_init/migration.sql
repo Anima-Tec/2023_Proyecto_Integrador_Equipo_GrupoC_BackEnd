@@ -26,8 +26,10 @@ CREATE TABLE `Prenda` (
 -- CreateTable
 CREATE TABLE `Comment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `idPrenda` INTEGER NOT NULL,
     `text` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `Comment_idPrenda_key`(`idPrenda`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -53,10 +55,12 @@ CREATE TABLE `Compra` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `idPrenda` INTEGER NOT NULL,
     `idUser` INTEGER NOT NULL,
+    `idComment` INTEGER NOT NULL,
     `fechaCompra` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Compra_idPrenda_key`(`idPrenda`),
     UNIQUE INDEX `Compra_idUser_key`(`idUser`),
+    UNIQUE INDEX `Compra_idComment_key`(`idComment`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -84,6 +88,9 @@ CREATE TABLE `Dona` (
     UNIQUE INDEX `Dona_idArticulo_key`(`idArticulo`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Comment` ADD CONSTRAINT `Comment_idPrenda_fkey` FOREIGN KEY (`idPrenda`) REFERENCES `Prenda`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Categoria` ADD CONSTRAINT `Categoria_idPrenda_fkey` FOREIGN KEY (`idPrenda`) REFERENCES `Prenda`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
