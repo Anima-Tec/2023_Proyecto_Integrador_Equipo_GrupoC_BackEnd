@@ -1,20 +1,20 @@
 import express from "express";
 import { router } from "./src/routers/router.js";
+import { checkPort } from "./src/config/enviroment-comprobate.js";
+import { checkUrl } from "./src/config/enviroment-comprobate.js";
 import "dotenv/config";
-//require("dotenv").config();
 
-if (!process.env.PORT || process.env.PORT.trim() === "") {
-  console.error(
-    "La variable de entorno PORT no está definida en el archivo .env o está vacía."
-  );
-  process.exit(1);
-}
+//Se compueba si existe las variables de entorno que se necesitan para correr el programa
+checkPort(process.env.PORT);
+checkUrl(process.env.DATABASE_URL);
 
 const port = process.env.PORT;
+
 const app = express();
 
+app.use(express.json());
 app.use("/", router);
 
 app.listen(port, () => {
-  console.log("Server listen on");
+  console.log(`Server listen on ${port}`);
 });
