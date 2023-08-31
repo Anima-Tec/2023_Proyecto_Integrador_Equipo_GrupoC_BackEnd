@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 export const getUsers = async (req, res) => {
   try {
     const users = await prisma.User.findMany();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     res
       .status(500)
