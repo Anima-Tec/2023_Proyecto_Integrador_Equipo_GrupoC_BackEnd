@@ -31,3 +31,21 @@ export const getComments = async (req, res) => {
       .json({ error: "Error en el servidor, no se logro obtener" });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  const id = parseInt(req.body.id);
+
+  if (isNaN(id) || id < 1) {
+    return res.status(400).json({ error: "Id invalida" });
+  }
+  try {
+    const deletes = await prisma.Comment.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.status(200).json(deletes);
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado eliminar el comentario" });
+  }
+};

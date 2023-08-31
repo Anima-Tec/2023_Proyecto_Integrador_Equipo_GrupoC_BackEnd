@@ -71,7 +71,7 @@ export const createUser = async (req, res) => {
 export const deleteUserById = async (req, res) => {
   // const id = parseInt(req.params.id);
   const id = parseInt(req.body.id);
-  parseInt(id);
+
   if (isNaN(id) || id < 1) {
     return res.status(400).json({ error: "Id invalida" });
   }
