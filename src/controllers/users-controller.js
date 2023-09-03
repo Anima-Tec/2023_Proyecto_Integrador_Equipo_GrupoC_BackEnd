@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await prisma.User.findMany();
+    const users = await prisma.Usuario.findMany();
     res.status(200).json(users);
   } catch (error) {
     res
@@ -27,7 +27,7 @@ export const getUserProfile = async (req, res) => {
   // const user = getUserById(userId);
 
   try {
-    const user = await prisma.User.findUnique({
+    const user = await prisma.Usuario.findUnique({
       where: {
         id: userId,
       },
@@ -36,7 +36,8 @@ export const getUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "No se encontro el usuario" });
     }
-    res.status(200).json({ name: user.name, email: user.email });
+
+    res.status(200).json({ name: user.nombre, email: user.email });
   } catch (error) {
     res.status(500).json({ error: "No se logro obtener la información" });
   }
@@ -44,21 +45,23 @@ export const getUserProfile = async (req, res) => {
 
 export const createUser = async (req, res) => {
   // const { email, password, name } = req.params;
-  const { name, surname, email, contrasena, edad, celular } = req.body;
+  const { nombre, apellido, fechaNacimiento, edad, email, cel, contrasena } =
+    req.body;
 
-  if (!name || !surname || !email || !contrasena || !edad || !celular) {
-    return res.status(400).json({ error: "Todos los campos son requeridos" });
-  }
+  // if (fechaNacimiento) {
+  //   return res.status(400).json({ error: "Todos los campos son requeridos" });
+  // }
 
   try {
-    const newUser = await prisma.User.create({
+    const newUser = await prisma.Usuario.create({
       data: {
-        name,
-        surname,
+        nombre,
+        apellido,
+        fechaNacimiento,
         email,
         contrasena,
         edad,
-        celular,
+        cel,
       },
     });
 
@@ -77,7 +80,7 @@ export const deleteUserById = async (req, res) => {
   }
 
   try {
-    const deleteUser = await prisma.User.delete({
+    const deleteUser = await prisma.Usuario.delete({
       where: {
         id: id,
       },
