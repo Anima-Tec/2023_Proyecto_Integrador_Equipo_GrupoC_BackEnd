@@ -9,7 +9,7 @@ export const createComment = async (req, res) => {
   }
 
   try {
-    const newComment = await prisma.Comment.create({
+    const newComment = await prisma.Comentario.create({
       data: {
         text,
       },

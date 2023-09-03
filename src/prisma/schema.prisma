@@ -7,80 +7,107 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id     Int  @id @default(autoincrement())
-  name     String
-  surname  String
-  email    String   @unique
-  contrasena String
-  edad Int 
-  celular Int 
-
-  compras Compra[]
-  ventas Vende[]
-  donaciones Dona[]
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @db.VarChar(50)
+  apellido    String   @db.VarChar(50)
+  fechaNacimiento String
+  edad        Int
+  email       String   @db.VarChar(255) @unique
+  cel         Int      @unique                  
+  contrasena  String                                                                                                       
+  // Define la relación con Dona
+  donas       Dona[]  
+  // Define la relación con Vende
+  vendes      Vende[]  
+  // Define la relación con Compra
+  compras     Compra[] 
+  // Define la relación con Prenda (como vendedor)
+  prendasVendidas Prenda[] 
 }
 
+// Define el modelo de Articulo
+model Articulo {
+  id           Int      @id @default(autoincrement())
+  descripcion  String?  @db.VarChar(200)
+  // Define la relación con Dona
+  donas        Dona[]   
+}
+
+// Define el modelo de Dona
+model Dona {
+  idUsuario  Int   @id @default(autoincrement())
+  idArticulo Int
+  fecha      DateTime
+  // Define las relaciones con Usuario y Articulo
+  usuario    Usuario @relation(fields: [idUsuario], references: [id])
+  articulo   Articulo @relation(fields: [idArticulo], references: [id]) 
+}
+
+// Define el modelo de Prenda
 model Prenda {
-  id Int @id @default(autoincrement())
-  nombre String
-  descripcion String
-  stock Int
-  precio Float
-
-  compras Compra[]
-  ventas Vende[]
-  categorias Categoria[]
- 
+  id          Int      @id @default(autoincrement())
+  nombre      String   @db.VarChar(50)
+  descripcion String?  @db.VarChar(200)
+  precio      Float
+  id_vendedor Int
+  stock       Int
+  talle       Int
+  // Define la relación con Usuario (como vendedor)
+  vendedor    Usuario  @relation(fields: [id_vendedor], references: [id]) 
+  // Define la relación con Compra
+  compras     Compra[] 
+  // Define la relación con Vende
+  ventas  Vende[] 
+  categorias  Categoria[]
+  tienes Tiene[]
 }
 
-model Comment {
-  id Int @id @default(autoincrement())
-  text String
-}
-
-model Articulo{
-  id Int @id @default(autoincrement())
-  descripcion String
-
-  donaciones Dona[]
-}
-
-model Categoria{
-  id Int @id @default(autoincrement())
-  nombre String
-  prenda Prenda @relation(fields: [idPrenda], references: id)
-  idPrenda Int
-}
-
+// Define el modelo de Compra
 model Compra {
-  id Int @id @default(autoincrement())
-  idPrenda Int @unique
-  idUser Int @unique
-  idComment Int @unique
-  fechaCompra DateTime
-
-  user User @relation(fields: [idUser], references: id)
-  prenda Prenda @relation(fields: [idPrenda], references: id)
+  id           Int      @id @default(autoincrement())
+  id_comprador Int
+  id_prenda    Int
+  fechaCompra  DateTime
+  nroCompra    Int
+  comentario   String?
+  // Define la relación con Usuario (como comprador)
+  comprador    Usuario @relation(fields: [id_comprador], references: [id]) 
+  // Define la relación con Prenda
+  prenda       Prenda  @relation(fields: [id_prenda], references: [id]) 
 }
 
+// Define el modelo de Vende
 model Vende {
-  id Int @id @default(autoincrement())
-  idUser Int @unique 
-  idPrenda Int @unique
-  precio Float
-  resena String
-
-  user User @relation(fields: [idUser], references: id)
-  prenda Prenda @relation(fields: [idPrenda], references: id)
+  id           Int      @id @default(autoincrement())
+  id_vendedor  Int
+  id_prenda    Int
+  fechaCompra  DateTime
+  nroCompra    Int
+  resena       String?
+  nroTransacion Int
+  vendedor     Usuario @relation(fields: [id_vendedor], references: [id]) 
+  // Define la relación personalizada con Prenda utilizando id_prenda
+  prenda Prenda  @relation(fields: [id_prenda], references: [id])
 }
 
-model Dona{
-  id Int @id @default(autoincrement())
-  fecha DateTime
-  idUser Int @unique
-  idArticulo Int @unique
+model Categoria {
+  id     Int      @id @default(autoincrement())
+  nombre String   @db.VarChar(50)
+  // Define la relación con Prenda (mediante Tiene)
+  prendas Prenda[]
+  Tienes Tiene[]
+}
 
-  user User @relation(fields: [idUser], references: id)
-  articulo Articulo @relation(fields: [idArticulo], references: id)
+// Define el modelo de Tiene (relación entre Prenda y Categoria)
+model Tiene {
+  id_prenda    Int 
+  id_categoria Int
+  // Define las relaciones con Prenda y Categoria
+  prenda       Prenda    @relation(fields: [id_prenda], references: id) 
+
+  categoria    Categoria @relation(fields: [id_categoria], references: id) 
+
+  @@id([id_prenda, id_categoria])
+
 }
