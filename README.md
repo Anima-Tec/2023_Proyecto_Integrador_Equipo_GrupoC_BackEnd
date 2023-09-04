@@ -6,6 +6,8 @@
 
 Asegurate de tener instalado "[Node.js](https://nodejs.org/en)"
 
+----
+
 ## Pasos de instalación
 
 1. _Clona el repositorio (Utilizando en la terminal "git clone `URL-del-repo`")_
@@ -14,8 +16,12 @@ Asegurate de tener instalado "[Node.js](https://nodejs.org/en)"
 4. _En el archivo `.env` crea una variable llamada `DATABASE_URL` y como valor agregale tu servicio de base de dato_
 5. _Utiliza el comando `npm install` para instalar todas las dependencias del proyecto_
 6. _utiliza el comando `node app.js` para correr la aplicación_
+7. 
+-----
 
 ## BDD - Prisma
+
+-----
 
 En este proyecto se utiliza [Prisma](https://www.prisma.io/) como ORM Y aquí se mostrar el paso a paso de como configurarlo en su maquina local.
 
@@ -32,3 +38,8 @@ En este [LINK](https://www.prisma.io/docs/reference/database-reference/connectio
 
 _PostgreSQL: postgresql://`USER`:`` PASSWORD`@`HOST`:`PORT ``/`DATABASE-NAME`_
 _MongoDB: mongodb://`USER`:`PASSWORD`@`HOST`/`DATABASE-NAME`_
+
+-----
+
+(La veersión más estable esta en la rama Main y en develop hay agunos objetos que pueden genrear conflictos)
+
