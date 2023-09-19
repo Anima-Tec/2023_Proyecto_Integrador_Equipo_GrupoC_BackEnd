@@ -21,27 +21,36 @@ export const getCategory = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { nombre, descripcion, stock, precio, id_vendedor, talle } = req.body;
+  const { nombre, descripcion, stock, precio, id_vendedor, talle, catName } =
+    req.body;
 
-  if (!nombre || !descripcion || !stock || !precio || !id_vendedor || !talle) {
+  if (
+    !nombre ||
+    !descripcion ||
+    !stock ||
+    !precio ||
+    !id_vendedor ||
+    !talle ||
+    !catName
+  ) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
-  // try {
-  const newProduct = await prisma.Prenda.create({
-    data: {
-      nombre,
-      descripcion,
-      stock,
-      id_vendedor,
-      precio,
-      talle,
-    },
-  });
-  res.status(201).json(newProduct);
-  // } catch (error) {
-  //   res.status(500).json({ error: "No se a logrado crear el producto" });
-  // }
+  try {
+    const newProduct = await prisma.Prenda.create({
+      data: {
+        nombre,
+        descripcion,
+        stock,
+        id_vendedor,
+        precio,
+        talle,
+      },
+    });
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado crear el producto" });
+  }
 };
 
 export const getProductByName = async (req, res) => {
@@ -65,22 +74,24 @@ export const getProductByName = async (req, res) => {
   }
 };
 
-export const filterByCat = async (req, res) => {
-  const { cat } = req.body;
-
+export const getAllCat = async (req, res) => {
   // try {
-  const categoria = await prisma.Categoria.findUnique({
-    where: {
-      nombre: cat,
+  const { category } = req.body;
+
+  const findCategory = await prisma.categoria.findFirst({
+    where: { nombre: category },
+    include: {
+      prendas: true,
     },
   });
 
-  if (!categoria) {
-    return res.status(404).json({ error: "No se encontro el usuario" });
+  if (!findCategory) {
+    return res.status(404).json({ message: "esa categoria no existe" });
   }
 
-  console.log(categoria);
-  // } catch (error) {
-  //   res.status(500).json({ error: error });
+  res.status(200).json(findCategory.prendas);
+
+  // }catch (error){
+
   // }
 };

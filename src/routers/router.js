@@ -5,7 +5,7 @@ import { getUserProfile } from "../controllers/users-controller.js";
 import { getProducts } from "../controllers/products-controller.js";
 import { createProduct } from "../controllers/products-controller.js";
 import { getProductByName } from "../controllers/products-controller.js";
-import { filterByCat } from "../controllers/products-controller.js";
+import { getAllCat } from "../controllers/products-controller.js";
 import { deleteUserById } from "../controllers/users-controller.js";
 import { createComment } from "../controllers/comments-controller.js";
 import { getComments } from "../controllers/comments-controller.js";
@@ -24,7 +24,7 @@ router.get("/users/profile", getUserProfile);
 router.get("/products", getProducts);
 router.get("/products/name", getProductByName);
 router.post("/product/create", createProduct);
-router.get("/product/cat", filterByCat);
+router.post("/product/cat", getAllCat);
 router.get("/Cat", getCategory);
 
 // rutas para comentario
