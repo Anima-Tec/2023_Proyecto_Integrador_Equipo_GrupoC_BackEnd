@@ -6,6 +6,8 @@
 
 Asegurate de tener instalado "[Node.js](https://nodejs.org/en)"
 
+----
+
 ## Pasos de instalación
 
 1. _Clona el repositorio (Utilizando en la terminal "git clone `URL-del-repo`")_
@@ -32,3 +34,6 @@ En este [LINK](https://www.prisma.io/docs/reference/database-reference/connectio
 
 _PostgreSQL: postgresql://`USER`:`` PASSWORD`@`HOST`:`PORT ``/`DATABASE-NAME`_
 _MongoDB: mongodb://`USER`:`PASSWORD`@`HOST`/`DATABASE-NAME`_
+
+(La veersión más estable esta en la rama Main y en develop hay agunos objetos que pueden genrear conflictos)
+

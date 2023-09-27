@@ -79,5 +79,4 @@ export const deleteUserById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
-  //Se elimina el usuario
 };
