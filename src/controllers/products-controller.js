@@ -10,7 +10,7 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getCategory = async (req, res) => {
+export const getAllCategory = async (req, res) => {
   try {
     const cat = await prisma.Categoria.findMany();
     console.log(cat);
@@ -74,24 +74,23 @@ export const getProductByName = async (req, res) => {
   }
 };
 
-export const getAllCat = async (req, res) => {
-  // try {
+export const getCat = async (req, res) => {
   const { category } = req.body;
 
-  const findCategory = await prisma.categoria.findFirst({
-    where: { nombre: category },
-    include: {
-      prendas: true,
-    },
-  });
+  try {
+    const findCategory = await prisma.categoria.findFirst({
+      where: { nombre: category },
+      include: {
+        prendas: true,
+      },
+    });
 
-  if (!findCategory) {
-    return res.status(404).json({ message: "esa categoria no existe" });
+    if (!findCategory) {
+      return res.status(404).json({ message: "esa categoria no existe" });
+    }
+
+    res.status(200).json(findCategory.prendas);
+  } catch (error) {
+    res.status(400).json({ error: "" });
   }
-
-  res.status(200).json(findCategory.prendas);
-
-  // }catch (error){
-
-  // }
 };
