@@ -92,3 +92,7 @@ export const deleteUserById = async (req, res) => {
   }
   //Se elimina el usuario
 };
+
+export const logInUser = (req, res) => {
+  
+};
