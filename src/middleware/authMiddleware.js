@@ -13,7 +13,7 @@ export const verifyToken = (req, res, next) => {
       return res.status(403).json({ message: "Token inavalido" });
     }
 
-    req.usuarioId = decoded.indexOf;
+    req.usuarioId = decoded.id;
     next();
   });
 };
