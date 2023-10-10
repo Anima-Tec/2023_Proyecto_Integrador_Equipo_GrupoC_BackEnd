@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { generateToken } from "../util/authUtils.js";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
@@ -12,9 +13,6 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// const getUserById = (id) => {
-//   return users.find((user) => user.id === id);
-// };
 
 export const getUserProfile = async (req, res) => {
   const userId = parseInt(req.body.id);
@@ -23,8 +21,8 @@ export const getUserProfile = async (req, res) => {
   if (isNaN(userId) || userId < 1) {
     return res.status(400).json({ error: "Id invalida" });
   }
+
   //Se busca el usuario
-  // const user = getUserById(userId);
 
   try {
     const user = await prisma.User.findUnique({
@@ -36,14 +34,15 @@ export const getUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "No se encontro el usuario" });
     }
+
     res.status(200).json({ name: user.name, email: user.email });
   } catch (error) {
+
     res.status(500).json({ error: "No se logro obtener la información" });
   }
 };
 
 export const createUser = async (req, res) => {
-  // const { email, password, name } = req.params;
   const { name, surname, email, contrasena, edad, celular } = req.body;
 
   if (!name || !surname || !email || !contrasena || !edad || !celular) {
@@ -69,8 +68,7 @@ export const createUser = async (req, res) => {
 };
 
 export const deleteUserById = async (req, res) => {
-  // const id = parseInt(req.params.id);
-  const id = parseInt(req.body.id);
+  const id = parseInt(req.params.id);
 
   if (isNaN(id) || id < 1) {
     return res.status(400).json({ error: "Id invalida" });
@@ -84,7 +82,29 @@ export const deleteUserById = async (req, res) => {
     });
 
     res.status(200).json(deleteUser);
+
   } catch (error) {
+
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
+};
+
+export const logIn = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password){
+    res.status(400).json({ error: "Ambos campos son requeridos" });
+  }
+try{
+  const user = await prisma.User.findUnique({ where: { email }});
+
+  if (!user || user.contrasena !== password){
+    res.status(401).json({ message: "credencial invalida"});
+  }
+
+  const token = generateToken(user.id, user.email)
+  res.json({ token });
+} catch (err) {
+
+};
 };

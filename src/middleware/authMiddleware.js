@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { generateToken } from "../util/authUtils";
+import { generateToken } from "../util/authUtils.js";
 
 export const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"];
