@@ -27,7 +27,7 @@ model Prenda {
   descripcion String
   stock Int
   precio Float
-
+  
   compras Compra[]
   ventas Vende[]
   categorias Categoria[]
@@ -49,8 +49,7 @@ model Articulo{
 model Categoria{
   id Int @id @default(autoincrement())
   nombre String
-  prenda Prenda @relation(fields: [idPrenda], references: id)
-  idPrenda Int
+  prenda Prenda[]
 }
 
 model Compra {
