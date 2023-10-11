@@ -22,7 +22,7 @@ export const getUserProfile = async (req, res) => {
   const { token } = req.headers;
   verifyToken(token);
   
-  const userId = parseInt(req.body.id);
+  const userId = parseInt(req.params.id);
 
 
   if (isNaN(userId) || userId < 1) {
@@ -54,6 +54,12 @@ export const createUser = async (req, res) => {
 
   if (!name || !surname || !email || !contrasena || !edad || !celular) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
+  }
+
+  const usuarioExistente = await prisma.user.findUnique({ where: { email } });
+
+  if (usuarioExistente) {
+    return res.status(400).json({ mensaje: 'El correo electrónico ya está en uso' });
   }
 
   try {
