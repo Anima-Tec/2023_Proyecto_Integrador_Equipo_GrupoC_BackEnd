@@ -21,6 +21,7 @@ export const getUsers = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   const { token } = req.headers;
   verifyToken(token);
+  
   const userId = parseInt(req.body.id);
 
 
@@ -68,6 +69,7 @@ export const createUser = async (req, res) => {
     });
 
     res.status(201).json(newUser);
+    
   } catch (error) {
     res.status(500).json({ error: "No se logro crear el usuario" });
   }
@@ -76,7 +78,7 @@ export const createUser = async (req, res) => {
 export const deleteUserById = async (req, res) => {
   const { token } = req.headers;
   verifyToken(token);
-  
+
   const id = parseInt(req.params.id);
 
   if (isNaN(id) || id < 1) {
