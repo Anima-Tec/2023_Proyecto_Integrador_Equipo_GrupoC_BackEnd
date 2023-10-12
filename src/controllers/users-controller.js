@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { generateToken } from "../util/authUtils.js";
+import "dotenv/config";
+import  jwt  from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
@@ -102,6 +103,7 @@ export const deleteUserById = async (req, res) => {
 
 export const logIn = async (req, res) => {
   const { email, password } = req.body;
+  const secretKey = process.env.JWT_ACCESS_SECRET;
 
   if (!email || !password){
     res.status(400).json({ error: "Ambos campos son requeridos" });
@@ -113,7 +115,7 @@ export const logIn = async (req, res) => {
     res.status(401).json({ message: "credencial invalida"});
   }
 
-  const token = generateToken(user.id, user.email)
+  const token = jwt.sign({ id: user.id }, secretKey, {expiresIn: "1800"})
   res.json({ token });
 
 };

@@ -13,10 +13,10 @@ export const verifyToken = (req, res, next) => {
   jwt.verify(token, secretKey, (error, decoded) => {
 
     if (error) {
-      return res.status(401).json({ error: 'Token no válido' });
+      console.error(error);
     }
 
-    req.userId = decoded.userId;
+    req = decoded;
     next();
   });
 };
