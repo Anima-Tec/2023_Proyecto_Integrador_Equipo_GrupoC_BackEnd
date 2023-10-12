@@ -1,19 +1,22 @@
 import jwt from "jsonwebtoken";
-import { generateToken } from "../util/authUtils.js";
+import "dotenv/config";
 
-export const verifyToken = (token) => {
+export const verifyToken = (req, res, next) => {
+
+  const token = req.headers.out;
+  const secretKey = process.env.JWT_ACCESS_SECRET;
 
   if (!token) {
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(403).json({ error: 'Token nulo' });
   }
 
-  jwt.verify(token, generateToken, (error, decoded) => {
-    
+  jwt.verify(token, secretKey, (error, decoded) => {
+
     if (error) {
-      return res.status(403).json({ message: "Token inavalido" });
+      return res.status(401).json({ error: 'Token no válido' });
     }
 
-    req.usuarioId = decoded.id;
+    req.userId = decoded.userId;
     next();
   });
 };

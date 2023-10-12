@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { verifyToken } from "../middleware/authMiddleware.js";
 
 const prisma = new PrismaClient();
 
@@ -15,8 +14,7 @@ export const getProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
+
 
   const { nombre, descripcion, stock, precio, idCategoria} = req.body;
   nombre = nombre.toLowerCase();

@@ -1,13 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { generateToken } from "../util/authUtils.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
 
   try {
+
     const users = await prisma.User.findMany();
     res.status(200).json(users);
   } catch (error) {
@@ -19,8 +17,6 @@ export const getUsers = async (req, res) => {
 
 
 export const getUserProfile = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
   
   const userId = parseInt(req.params.id);
 
@@ -82,8 +78,6 @@ export const createUser = async (req, res) => {
 };
 
 export const deleteUserById = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
 
   const id = parseInt(req.params.id);
 

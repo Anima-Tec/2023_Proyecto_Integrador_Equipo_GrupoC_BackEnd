@@ -18,14 +18,14 @@ router.post("/user/create", createUser);
 router.get("/products", getProducts);
 router.get("/productName", getProductByName)
 
-router.get("/users", getUsers);
+router.get("/users", verifyToken, getUsers);
 router.delete("/users/delete", deleteUserById);
-router.get("/users/profile/:id", getUserProfile);
+router.get("/users/profile/:id", verifyToken, getUserProfile);
 
 
 // rutas para products-controller
 
-router.post("/product/create", createProduct);
+router.post("/product/create", verifyToken, createProduct);
 
 router.get("/comments", getComments);
 router.post("/product/comment", createComment);
