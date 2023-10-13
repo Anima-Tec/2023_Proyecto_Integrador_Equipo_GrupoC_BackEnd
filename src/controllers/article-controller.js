@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
 export const createArticle = async (req, res) =>{
     const { name, descripcion, lugar_retiro } = req.body;
     try {
