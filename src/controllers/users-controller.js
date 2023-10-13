@@ -57,10 +57,16 @@ export const createUser = async (req, res) => {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
+
+
   const usuarioExistente = await prisma.user.findUnique({ where: { email } });
 
   if (usuarioExistente) {
     return res.status(400).json({ mensaje: 'El correo electrónico ya está en uso' });
+  }
+
+  if(contrasena.length < 8) {
+    return res.status(400).json({ mensaje: 'La constraseña debe tener al menos 8 caracteres' });
   }
 
   try {

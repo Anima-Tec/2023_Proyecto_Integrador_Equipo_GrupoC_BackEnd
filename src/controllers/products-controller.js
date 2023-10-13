@@ -25,6 +25,10 @@ export const createProduct = async (req, res) => {
     res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
+  if(stock < 1 ){
+    res.status(400).json({ error: "Stock debe ser mayor a '0'" });
+  }
+
   try {
     const newProduct = await prisma.Prenda.create({
       data: {

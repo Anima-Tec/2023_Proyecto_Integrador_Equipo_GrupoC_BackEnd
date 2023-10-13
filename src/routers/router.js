@@ -9,6 +9,7 @@ import { createComment } from "../controllers/comments-controller.js";
 import { getComments } from "../controllers/comments-controller.js";
 import { deleteComment } from "../controllers/comments-controller.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
+import { createArticle } from "../controllers/article-controller.js";
 
 
 const router = express.Router();
@@ -25,6 +26,7 @@ router.get("/product/cat", categoryFilter);
 router.delete("/user/:id", deleteUserById);
 
 router.get("/users/profile", getUserProfile);
+router.post("/article",verifyToken , createArticle);
 
 
 // rutas para products-controller

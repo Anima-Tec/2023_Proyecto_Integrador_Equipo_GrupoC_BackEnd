@@ -18,7 +18,6 @@ model User {
 
   compras Compra[]
   ventas Vende[]
-  donaciones Dona[]
 }
 
 model Prenda {
@@ -41,9 +40,9 @@ model Comment {
 
 model Articulo{
   id Int @id @default(autoincrement())
+  name String 
   descripcion String
-
-  donaciones Dona[]
+  lugar_retiro String
 }
 
 model Categoria{
@@ -72,14 +71,4 @@ model Vende {
 
   user User @relation(fields: [idUser], references: id)
   prenda Prenda @relation(fields: [idPrenda], references: id)
-}
-
-model Dona{
-  id Int @id @default(autoincrement())
-  fecha DateTime
-  idUser Int @unique
-  idArticulo Int @unique
-
-  user User @relation(fields: [idUser], references: id)
-  articulo Articulo @relation(fields: [idArticulo], references: id)
 }
