@@ -18,7 +18,6 @@ export const createProduct = async (req, res) => {
 
   const { nombre, descripcion, stock, precio, idCategoria} = req.body;
   nombre = nombre.toLowerCase();
-  descripcion = descripcion.toLowerCase();
 
 
 
@@ -66,4 +65,29 @@ export const getProductByName = async (req, res) => {
     res.status(500).json({ message: "error al buscar la prenda" });
   }
 
+}
+
+export const categoryFilter = async (req, res) => {
+  try {
+    const { id } = req.body; // Recibe el parámetro de consulta "categoria"
+
+    if (!id) {
+      return res.status(400).json({ error: 'Debes proporcionar una categoría.' });
+    }
+
+    const prendas = await prisma.prenda.findMany({
+      where: {
+        categorias: {
+          some: {
+            id: id, // Filtra por nombre de categoría
+          },
+        },
+      },
+    });
+  
+    return res.json(prendas);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Ocurrió un error al obtener las prendas.' });
+  }
 }
