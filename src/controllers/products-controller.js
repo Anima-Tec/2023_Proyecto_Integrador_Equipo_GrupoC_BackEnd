@@ -17,7 +17,7 @@ export const createProduct = async (req, res) => {
 
 
   const { nombre, descripcion, stock, precio, idCategoria} = req.body;
-  nombre = nombre.toLowerCase();
+
 
 
 
@@ -94,4 +94,18 @@ export const categoryFilter = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: 'Ocurrió un error al obtener las prendas.' });
   }
+}
+
+export const allCategorys = async (req, res) => {
+  try {
+
+    const cats = await prisma.Categoria.findMany();
+    res.status(200).json(cats);
+
+    } catch (error) {
+      res
+      .status(500)
+      .json({ error: "Error en el servidor, no se logro obtener el usuario" });
+    }
+  
 }

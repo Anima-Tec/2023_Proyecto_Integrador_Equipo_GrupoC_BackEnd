@@ -13,8 +13,8 @@ model User {
   surname  String
   email    String   @unique
   contrasena String
-  edad Int 
-  celular Int 
+  edad String
+  celular String 
 
   compras Compra[]
   ventas Vende[]

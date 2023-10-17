@@ -2,7 +2,7 @@ import express from "express";
 import { getUserByName, getUsers, logIn } from "../controllers/users-controller.js";
 import { createUser } from "../controllers/users-controller.js";
 import { getUserProfile } from "../controllers/users-controller.js";
-import { categoryFilter, getProductByName, getProducts } from "../controllers/products-controller.js";
+import { allCategorys, categoryFilter, getProductByName, getProducts } from "../controllers/products-controller.js";
 import { createProduct } from "../controllers/products-controller.js";
 import { deleteUserById } from "../controllers/users-controller.js";
 import { createComment } from "../controllers/comments-controller.js";
@@ -27,11 +27,12 @@ router.delete("/user/:id", deleteUserById);
 
 router.get("/users/profile", getUserProfile);
 router.post("/article",verifyToken , createArticle);
+router.get("/category", allCategorys);
 
 
 // rutas para products-controller
 
-router.post("/product", verifyToken, createProduct);
+router.post("/product",verifyToken , createProduct);
 
 router.get("/comments", getComments);
 router.post("/product/comment", verifyToken, createComment);

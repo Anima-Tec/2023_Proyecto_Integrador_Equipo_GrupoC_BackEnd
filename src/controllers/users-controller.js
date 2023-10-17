@@ -57,9 +57,13 @@ export const createUser = async (req, res) => {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
-
-
   const usuarioExistente = await prisma.user.findUnique({ where: { email } });
+
+  const edadInt = edad;
+
+  if(edadInt < 18){
+    return res.status(400).json({ error: "La edad debe ser mayor a 18" });
+  }
 
   if (usuarioExistente) {
     return res.status(400).json({ mensaje: 'El correo electrónico ya está en uso' });
@@ -103,10 +107,10 @@ export const deleteUserById = async (req, res) => {
       },
     });
 
-    res.status(200).json(deleteUser);
+    res.status(200).json({message: "El usuario se a eliminado correctamente"});
 
   } catch (error) {
-
+    console.log(error);
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
 };
