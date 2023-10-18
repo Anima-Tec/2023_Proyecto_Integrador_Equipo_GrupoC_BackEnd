@@ -16,17 +16,17 @@ export const getProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
 
 
-  const { nombre, descripcion, stock, precio, idCategoria} = req.body;
+  const { name, descripcion, stock, precio, genero, idCategoria} = req.body;
 
 
-
-
-  if (!nombre || !descripcion || !stock || !precio) {
-    res.status(400).json({ error: "Todos los campos son requeridos" });
+  if(!name || !descripcion || !stock || !precio || !genero){
+   return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
+  const nombre = name.toLowerCase();
+
   if(stock < 1 ){
-    res.status(400).json({ error: "Stock debe ser mayor a '0'" });
+    return res.status(400).json({ error: "Stock debe ser mayor a '0'" });
   }
 
   try {
@@ -36,6 +36,7 @@ export const createProduct = async (req, res) => {
         descripcion,
         stock,
         precio,
+        genero,
         categorias: { connect: { id: idCategoria } },
       },
     });
@@ -51,7 +52,7 @@ export const getProductByName = async (req, res) => {
   const { nombre } = req.body;
 
   if (!nombre){
-    res.status(400).json({ error: "Faltan parametros 'nombre' " });
+   return res.status(400).json({ error: "Faltan parametros 'nombre' " });
   }
 
   try{
@@ -60,7 +61,7 @@ export const getProductByName = async (req, res) => {
     });
 
     if (!prendas){
-      res.status(404).json({ message: "No sean encontrado prendas"});
+      return res.status(404).json({ message: "No sean encontrado prendas"});
     }
 
     res.status(200).json(prendas);
@@ -108,4 +109,25 @@ export const allCategorys = async (req, res) => {
       .json({ error: "Error en el servidor, no se logro obtener el usuario" });
     }
   
+}
+
+export const deleteProductById = async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  if (isNaN(id) || id < 1) {
+    return res.status(400).json({ error: "Id invalida" });
+  }
+
+  try {
+    const deleteProduct = await prisma.Prenda.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({message: "El producto se a eliminado correctamente"});
+
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado eliminar el usuario" });
+  }
 }

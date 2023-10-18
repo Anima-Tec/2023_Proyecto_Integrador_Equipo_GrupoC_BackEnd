@@ -19,7 +19,7 @@ export const getUsers = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   
-  const { token } = req.headers;
+  const token = req.headers.authorization;
 
 
   if (!token){
@@ -110,7 +110,6 @@ export const deleteUserById = async (req, res) => {
     res.status(200).json({message: "El usuario se a eliminado correctamente"});
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
 };

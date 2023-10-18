@@ -5,8 +5,6 @@ import { checkUrl } from "./src/config/enviroment-comprobate.js";
 import cors from "cors";
 import "dotenv/config";
 
-
-//Se compueba si existe las variables de entorno que se necesitan para correr el programa
 checkPort(process.env.PORT);
 checkUrl(process.env.DATABASE_URL);
 checkKey(process.env.JWT_ACCESS_SECRET);
