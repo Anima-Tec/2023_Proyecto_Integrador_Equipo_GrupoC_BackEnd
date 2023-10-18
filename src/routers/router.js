@@ -9,30 +9,34 @@ import { createComment } from "../controllers/comments-controller.js";
 import { getComments } from "../controllers/comments-controller.js";
 import { deleteComment } from "../controllers/comments-controller.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { createArticle } from "../controllers/article-controller.js";
+import { createArticle, getArticles } from "../controllers/article-controller.js";
 
 const router = express.Router();
 
+// Rutas de users-controller
+
 router.post("/user/logIn", logIn)
 router.post("/user/singIn", createUser);
-router.get("/products", getProducts);
-router.get("/productName", getProductByName)
-
-router.get("/user/name",verifyToken, getUserByName)
-
-router.get("/users", verifyToken, getUsers);
-router.get("/product/cat", categoryFilter);
-router.delete("/user/:id", deleteUserById);
-
 router.get("/users/profile", getUserProfile);
-router.post("/article",verifyToken , createArticle);
-router.get("/category", allCategorys);
+router.get("/users", verifyToken, getUsers);
+router.get("/user/name",verifyToken, getUserByName)
+router.delete("/user/:id",verifyToken ,deleteUserById);
 
+// Rutas de products-controllers
+
+router.get("/products", getProducts);
 router.post("/product",verifyToken , createProduct);
+router.get("/productName", getProductByName)
+router.get("/product/cat", categoryFilter);
+router.get("/category", allCategorys);
+router.delete("/product/:id", verifyToken, deleteProductById);
+
+// Rutas de comment-controller y article-controller
 
 router.get("/comments", getComments);
-router.post("/product/comment", verifyToken, createComment);
+router.post("/comment", verifyToken, createComment);
 router.delete("/comments", verifyToken, deleteComment);
+router.post("/article",verifyToken , createArticle);
+router.get("/articles", getArticles);
 
-router.delete("/product/:id", verifyToken, deleteProductById);
 export { router };
