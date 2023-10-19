@@ -132,3 +132,25 @@ export const deleteProductById = async (req, res) => {
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
 }
+
+export const getProductByGenero = async (req, res) =>{
+  try {
+    const { genero } = req.body; // Obtener el género del query param
+
+    if (!genero) {
+      return res.status(400).json({ error: 'El parámetro género es requerido' });
+    }
+
+    // Consultar la base de datos para encontrar prendas con el género especificado
+    const prendas = await prisma.prenda.findMany({
+      where: {
+        genero: genero,
+      },
+    });
+
+    res.json(prendas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al buscar prendas por género' });
+  }
+}

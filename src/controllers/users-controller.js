@@ -151,7 +151,7 @@ export const getUserByName = async (req, res) =>{
       },
     });
 
-    res.json(user);
+    res.json({name: user.nombre, email: user.email});
 
   } catch (error) {
     res.status(500).json({ mensaje: 'Error interno del servidor' });
