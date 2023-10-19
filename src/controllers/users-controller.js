@@ -1,13 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { generateToken } from "../util/authUtils.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import "dotenv/config";
+import  jwt  from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
 
   try {
+
     const users = await prisma.User.findMany();
     res.status(200).json(users);
   } catch (error) {
@@ -19,22 +18,23 @@ export const getUsers = async (req, res) => {
 
 
 export const getUserProfile = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
   
-  const userId = parseInt(req.body.id);
+  const token = req.headers.authorization;
 
 
-  if (isNaN(userId) || userId < 1) {
-    return res.status(400).json({ error: "Id invalida" });
+  if (!token){
+    return res.status(401).json({ message: "Token Faltante"})
   }
 
   //Se busca el usuario
 
   try {
+
+    const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
+
     const user = await prisma.User.findUnique({
       where: {
-        id: userId,
+        id: data.id,
       },
     });
 
@@ -43,6 +43,7 @@ export const getUserProfile = async (req, res) => {
     }
 
     res.status(200).json({ name: user.name, email: user.email });
+
   } catch (error) {
 
     res.status(500).json({ error: "No se logro obtener la información" });
@@ -54,6 +55,22 @@ export const createUser = async (req, res) => {
 
   if (!name || !surname || !email || !contrasena || !edad || !celular) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
+  }
+
+  const usuarioExistente = await prisma.user.findUnique({ where: { email } });
+
+  const edadInt = edad;
+
+  if(edadInt < 18){
+    return res.status(400).json({ error: "La edad debe ser mayor a 18" });
+  }
+
+  if (usuarioExistente) {
+    return res.status(400).json({ mensaje: 'El correo electrónico ya está en uso' });
+  }
+
+  if(contrasena.length < 8) {
+    return res.status(400).json({ mensaje: 'La constraseña debe tener al menos 8 caracteres' });
   }
 
   try {
@@ -76,8 +93,6 @@ export const createUser = async (req, res) => {
 };
 
 export const deleteUserById = async (req, res) => {
-  const { token } = req.headers;
-  verifyToken(token);
 
   const id = parseInt(req.params.id);
 
@@ -92,28 +107,54 @@ export const deleteUserById = async (req, res) => {
       },
     });
 
-    res.status(200).json(deleteUser);
+    res.status(200).json({message: "El usuario se a eliminado correctamente"});
 
   } catch (error) {
-
     res.status(500).json({ error: "No se a logrado eliminar el usuario" });
   }
 };
 
 export const logIn = async (req, res) => {
   const { email, password } = req.body;
+  const secretKey = process.env.JWT_ACCESS_SECRET;
 
   if (!email || !password){
-    res.status(400).json({ error: "Ambos campos son requeridos" });
+    return res.status(400).json({ error: "Ambos campos son requeridos" });
   }
 
   const user = await prisma.User.findUnique({ where: { email }});
 
   if (!user || user.contrasena !== password){
-    res.status(401).json({ message: "credencial invalida"});
+    return res.status(401).json({ message: "credencial invalida"});
   }
 
-  const token = generateToken(user.id, user.email)
-  res.json({ token });
+  const token = jwt.sign({ id: user.id }, secretKey);
+  res.json( { token: token } );
 
 };
+
+export const getUserByName = async (req, res) =>{
+  const { name } = req.body;
+  
+  if (!name) {
+    return res.status(400).json({ mensaje: 'El parámetro "nombre" es obligatorio' });
+  }
+
+  try {
+    // Realiza la búsqueda de usuarios por nombre en la base de datos
+    const user = await prisma.user.findMany({
+      where: {
+        name: {
+          contains: name, // Puedes ajustar la búsqueda según tus necesidades
+        },
+      },
+    });
+
+    res.json(user);
+
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+
+}
+
