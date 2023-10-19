@@ -27,6 +27,7 @@ model Prenda {
   descripcion String
   imagen String
   stock Int
+  talle String
   precio Float
   genero String
   

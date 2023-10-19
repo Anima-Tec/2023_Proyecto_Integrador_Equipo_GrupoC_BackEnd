@@ -16,10 +16,10 @@ export const getProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
 
 
-  const { name, descripcion, imagen, stock, precio, genero, idCategoria} = req.body;
+  const { name, descripcion, imagen, stock, precio, genero, idCategoria, talle} = req.body;
 
 
-  if(!name || !descripcion || !stock || !precio || !genero || !imagen){
+  if(!name || !descripcion || !stock || !precio || !genero || !imagen || !talle){
    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
@@ -36,6 +36,7 @@ export const createProduct = async (req, res) => {
         descripcion,
         imagen,
         stock,
+        talle,
         precio,
         genero,
         categorias: { connect: { id: idCategoria } },
