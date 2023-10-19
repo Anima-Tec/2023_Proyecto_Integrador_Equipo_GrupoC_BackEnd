@@ -1,20 +1,32 @@
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
   try {
+
     const products = await prisma.Prenda.findMany();
     res.status(200).json(products);
+
   } catch (error) {
     res.status(500).json({ error: "No se a logrado conseguir la información" });
   }
 };
 
 export const createProduct = async (req, res) => {
-  const { nombre, descripcion, stock, precio } = req.body;
 
-  if (!nombre || !descripcion || !stock || !precio) {
-    return res.status(400).json({ error: "Todos los campos son requeridos" });
+
+  const { name, descripcion, stock, precio, genero, idCategoria} = req.body;
+
+
+  if(!name || !descripcion || !stock || !precio || !genero){
+   return res.status(400).json({ error: "Todos los campos son requeridos" });
+  }
+
+  const nombre = name.toLowerCase();
+
+  if(stock < 1 ){
+    return res.status(400).json({ error: "Stock debe ser mayor a '0'" });
   }
 
   try {
@@ -24,24 +36,98 @@ export const createProduct = async (req, res) => {
         descripcion,
         stock,
         precio,
+        genero,
+        categorias: { connect: { id: idCategoria } },
       },
     });
+
     res.status(201).json(newProduct);
-  } catch (error) {
+
+   } catch (error) {
     res.status(500).json({ error: "No se a logrado crear el producto" });
+   }
+};
+
+export const getProductByName = async (req, res) => {
+  const { nombre } = req.body;
+
+  if (!nombre){
+   return res.status(400).json({ error: "Faltan parametros 'nombre' " });
   }
 
-  // const { name, price } = req.params;
+  try{
+    const prendas = await prisma.Prenda.findMany({
+      where: { nombre: { contains: nombre.toLowerCase() } },
+    });
 
-  // if (!name || !price) {
-  //   return res.status(400).json({ error: "Todos los campos son obligatorios" });
-  // }
+    if (!prendas){
+      return res.status(404).json({ message: "No sean encontrado prendas"});
+    }
 
-  // const newProduct = {
-  //   name,
-  //   price: parseFloat(price),
-  // };
+    res.status(200).json(prendas);
 
-  // products.push(newProduct);
-  // res.status(201).json(newProduct);
-};
+  }catch(error){
+    res.status(500).json({ message: "error al buscar la prenda" });
+  }
+
+}
+
+export const categoryFilter = async (req, res) => {
+  try {
+    const { id } = req.body; // Recibe el parámetro de consulta "categoria"
+
+    if (!id) {
+      return res.status(400).json({ error: 'Debes proporcionar una categoría.' });
+    }
+
+    const prendas = await prisma.prenda.findMany({
+      where: {
+        categorias: {
+          some: {
+            id: id, // Filtra por nombre de categoría
+          },
+        },
+      },
+    });
+  
+    return res.json(prendas);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Ocurrió un error al obtener las prendas.' });
+  }
+}
+
+export const allCategorys = async (req, res) => {
+  try {
+
+    const cats = await prisma.Categoria.findMany();
+    res.status(200).json(cats);
+
+    } catch (error) {
+      res
+      .status(500)
+      .json({ error: "Error en el servidor, no se logro obtener el usuario" });
+    }
+  
+}
+
+export const deleteProductById = async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  if (isNaN(id) || id < 1) {
+    return res.status(400).json({ error: "Id invalida" });
+  }
+
+  try {
+    const deleteProduct = await prisma.Prenda.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({message: "El producto se a eliminado correctamente"});
+
+  } catch (error) {
+    res.status(500).json({ error: "No se a logrado eliminar el usuario" });
+  }
+}
