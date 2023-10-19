@@ -42,7 +42,7 @@ export const getUserProfile = async (req, res) => {
       return res.status(404).json({ error: "No se encontro el usuario" });
     }
 
-    res.status(200).json({ name: user.name, email: user.email });
+    res.status(200).json({ name: user.name, surname: user.surname, email: user.email, imagen: user.imagen, edad: user.edad});
 
   } catch (error) {
 
@@ -51,9 +51,9 @@ export const getUserProfile = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { name, surname, email, contrasena, edad, celular } = req.body;
+  const { name, surname, imagen, email, contrasena, edad, celular } = req.body;
 
-  if (!name || !surname || !email || !contrasena || !edad || !celular) {
+  if (!name || !surname || !email || !contrasena || !edad || !celular || !imagen) {
     return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
@@ -78,6 +78,7 @@ export const createUser = async (req, res) => {
       data: {
         name,
         surname,
+        imagen,
         email,
         contrasena,
         edad,
