@@ -18,10 +18,13 @@ export const createProduct = async (req, res) => {
 
   const { name, descripcion, imagen, stock, precio, genero, idCategoria, talle} = req.body;
 
+  const token = req.headers.authorization;
 
   if(!name || !descripcion || !stock || !precio || !genero || !imagen || !talle){
    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
+
+  const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
 
   const nombre = name.toLowerCase();
 
@@ -38,6 +41,7 @@ export const createProduct = async (req, res) => {
         stock,
         talle,
         precio,
+        idUser: data.id,
         genero,
         categorias: { connect: { id: idCategoria } },
       },
