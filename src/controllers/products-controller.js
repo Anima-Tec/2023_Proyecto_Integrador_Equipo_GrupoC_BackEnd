@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import "dotenv/config"
+import jwt from "jsonwebtoken"
 const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
@@ -170,7 +171,7 @@ export const getUserProductos = async (req, res) => {
   try{
     const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
 
-    const product= await prisma.Prenda.findUnique({
+    const product= await prisma.Prenda.findMany({
       where: {
         idUser: data.id,
       },
