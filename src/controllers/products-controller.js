@@ -81,7 +81,7 @@ export const getProductByName = async (req, res) => {
 
 export const categoryFilter = async (req, res) => {
   const categoriaId = parseInt(req.params.id);
-  const genero = req.params.genero
+  const genero = req.params.genero;
 
   if(!genero || !categoriaId){
     return res.status(400).json({message: "faltan parametros"})
@@ -91,7 +91,11 @@ export const categoryFilter = async (req, res) => {
     const prendas = await prisma.prenda.findMany({
       where: {
         genero: genero,
-        idCategoria: categoriaId,
+        categorias:{
+          some:{
+            id: categoriaId,
+          },
+        }
       },
     });
 
