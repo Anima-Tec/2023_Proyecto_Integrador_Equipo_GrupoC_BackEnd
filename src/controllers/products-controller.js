@@ -140,7 +140,7 @@ export const deleteProductById = async (req, res) => {
 
 export const getProductByGenero = async (req, res) =>{
   try {
-    const { genero } = req.body; // Obtener el género del query param
+    const { genero } = req.params; // Obtener el género del query param
 
     if (!genero) {
       return res.status(400).json({ error: 'El parámetro género es requerido' });
@@ -157,5 +157,31 @@ export const getProductByGenero = async (req, res) =>{
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al buscar prendas por género' });
+  }
+}
+
+export const getUserProductos = async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token){
+    return res.status(401).json({ message: "Token Faltante"})
+  }
+
+  try{
+    const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
+
+    const product= await prisma.Prenda.findUnique({
+      where: {
+        idUser: data.id,
+      },
+    });
+
+    if(!product){
+      return res.status(404).json({message:"El usuario no tiene productos"})
+    }
+    
+    res.status(201).json(product)
+  }catch(error){
+    res.status(500).json({message: "error al buscar la información"});
   }
 }
