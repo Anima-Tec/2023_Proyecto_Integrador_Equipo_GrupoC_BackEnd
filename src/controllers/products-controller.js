@@ -81,8 +81,9 @@ export const getProductByName = async (req, res) => {
 
 export const categoryFilter = async (req, res) => {
   try {
-    const id  = parseInt(req.params.id); // Recibe el parámetro de consulta "categoria"
-    const genero = req.params.genero
+    const categoria = req.params.categoria; // Recibe el parámetro de consulta "categoria"
+    const genero = req.params.genero;
+    
     if (!id) {
       return res.status(400).json({ error: 'Debes proporcionar una categoría.' });
     }
@@ -91,7 +92,7 @@ export const categoryFilter = async (req, res) => {
       where: {
         categorias: {
           some: {
-            id: id, // Filtra por nombre de categoría
+            genero: genero, // Filtra por nombre de categoría
           },
         },
       },
@@ -100,7 +101,7 @@ export const categoryFilter = async (req, res) => {
     const productosFiltrados = prendasGenero.filter((producto) => {
       return producto.categorias.some((c) => c.nombre === categoria);
     });
-    
+
     return res.json(productosFiltrados);
   } catch (error) {
     console.error(error);
