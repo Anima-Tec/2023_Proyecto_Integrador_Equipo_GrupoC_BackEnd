@@ -83,18 +83,14 @@ export const categoryFilter = async (req, res) => {
   try {
     const categoria = req.params.categoria; // Recibe el parámetro de consulta "categoria"
     const genero = req.params.genero;
-    
+
     if (!id) {
       return res.status(400).json({ error: 'Debes proporcionar una categoría.' });
     }
 
     const prendasGenero = await prisma.prenda.findMany({
       where: {
-        categorias: {
-          some: {
-            genero: genero, // Filtra por nombre de categoría
-          },
-        },
+            genero: genero,
       },
     });
     
