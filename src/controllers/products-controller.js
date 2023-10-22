@@ -25,7 +25,7 @@ export const createProduct = async (req, res) => {
    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
-  const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
+  const data = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
   const nombre = name.toLowerCase();
 
