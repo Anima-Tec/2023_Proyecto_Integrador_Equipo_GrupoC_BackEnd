@@ -55,7 +55,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const getProductByName = async (req, res) => {
-  const { nombre } = req.body;
+  const nombre = req.params.name;
 
   if (!nombre){
    return res.status(400).json({ error: "Faltan parametros 'nombre' " });
@@ -179,7 +179,7 @@ export const getUserProductos = async (req, res) => {
     if(!product){
       return res.status(404).json({message:"El usuario no tiene productos"})
     }
-    
+
     res.status(201).json(product)
   }catch(error){
     res.status(500).json({message: "error al buscar la información"});

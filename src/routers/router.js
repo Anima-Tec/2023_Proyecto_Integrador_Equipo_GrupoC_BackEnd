@@ -2,7 +2,7 @@ import express from "express";
 import { getUserByName, getUsers, logIn } from "../controllers/users-controller.js";
 import { createUser } from "../controllers/users-controller.js";
 import { getUserProfile } from "../controllers/users-controller.js";
-import { allCategorys, categoryFilter, deleteProductById, getProductByGenero, getProductByName, getProducts } from "../controllers/products-controller.js";
+import { allCategorys, categoryFilter, deleteProductById, getProductByGenero, getProductByName, getProducts, getUserProductos } from "../controllers/products-controller.js";
 import { createProduct } from "../controllers/products-controller.js";
 import { deleteUserById } from "../controllers/users-controller.js";
 import { createComment } from "../controllers/comments-controller.js";
@@ -26,11 +26,12 @@ router.delete("/user/:id",verifyToken ,deleteUserById);
 
 router.get("/products", getProducts);
 router.post("/product",verifyToken , createProduct);
-router.get("/productName", getProductByName)
+router.get("/productName/:name", getProductByName)
 router.get("/product/cat", categoryFilter);
 router.get("/category", allCategorys);
 router.delete("/product/:id", verifyToken, deleteProductById);
-router.get("/product/genero", getProductByGenero)
+router.get("/product/genero", getProductByGenero);
+router.get("/product/profile", getUserProductos);
 
 // Rutas de comment-controller y article-controller
 
