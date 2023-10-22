@@ -83,23 +83,20 @@ export const categoryFilter = async (req, res) => {
   const categoriaId = parseInt(req.params.id);
   const genero = req.params.genero
 
-  if(!genero || !categoria){
+  if(!genero || !categoriaId){
     return res.status(400).json({message: "faltan parametros"})
   }
   try {
 
-    const productos = prisma.Prenda.findMany({
+    const prendas = await prisma.prenda.findMany({
       where: {
-        genero,
-        categorias: {
-          some: {
-            id: categoriaId,
-          },
-        },
+        genero: genero,
+        idCategoria: categoriaId,
       },
     });
 
-    res.status(200).json(productos);
+    
+    res.status(200).json(prendas);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Ocurrió un error al obtener las prendas.' });
