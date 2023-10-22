@@ -27,7 +27,7 @@ router.delete("/user/:id",verifyToken ,deleteUserById);
 router.get("/products", getProducts);
 router.post("/product",verifyToken , createProduct);
 router.get("/productName/:name", getProductByName)
-router.get("/product/cat", categoryFilter);
+router.get("/product/cat/:id/:genero", categoryFilter);
 router.get("/category", allCategorys);
 router.delete("/product/:id", verifyToken, deleteProductById);
 router.get("/product/genero/:genero", getProductByGenero);
