@@ -141,7 +141,7 @@ export const deleteProductById = async (req, res) => {
 
 export const getProductByGenero = async (req, res) =>{
   try {
-    const { genero } = req.params; // Obtener el género del query param
+    const genero = req.params.genero; // Obtener el género del query param
 
     if (!genero) {
       return res.status(400).json({ error: 'El parámetro género es requerido' });

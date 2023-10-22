@@ -30,7 +30,7 @@ router.get("/productName/:name", getProductByName)
 router.get("/product/cat", categoryFilter);
 router.get("/category", allCategorys);
 router.delete("/product/:id", verifyToken, deleteProductById);
-router.get("/product/genero", getProductByGenero);
+router.get("/product/genero/:genero", getProductByGenero);
 router.get("/product/profile", verifyToken ,getUserProductos);
 
 // Rutas de comment-controller y article-controller
