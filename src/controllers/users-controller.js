@@ -42,7 +42,7 @@ export const getUserProfile = async (req, res) => {
       return res.status(404).json({ error: "No se encontro el usuario" });
     }
 
-    res.status(200).json({ name: user.name, surname: user.surname, email: user.email, imagen: user.imagen, edad: user.edad});
+    res.status(200).json({ id: user.id, name: user.name, surname: user.surname, email: user.email, imagen: user.imagen, edad: user.edad});
 
   } catch (error) {
 
