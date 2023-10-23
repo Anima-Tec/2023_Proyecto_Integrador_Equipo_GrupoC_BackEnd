@@ -74,7 +74,7 @@ export const getProductByName = async (req, res) => {
     res.status(200).json(prendas);
 
   }catch(error){
-    res.status(500).json({ message: "error al buscar la prenda" });
+    res.status(500).json({ error: "error al buscar la prenda" });
   }
 
 }
@@ -186,6 +186,27 @@ export const getUserProductos = async (req, res) => {
 
     res.status(201).json(product)
   }catch(error){
-    res.status(500).json({message: "error al buscar la información"});
+    res.status(500).json({error: "error al buscar la información"});
   }
 }
+
+export const getProductById = async (req, res) => {
+  const productId = parseInt(req.params.id);
+
+  try {
+    const producto = await prisma.Prenda.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!producto) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    res.status(200).json(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'No se a logrado encontrar el producto' });
+  }
+};
