@@ -29,6 +29,7 @@ model Prenda {
   stock Int
   talle String
   precio Float
+  idUser Int
   genero String
   
   compras Compra[]

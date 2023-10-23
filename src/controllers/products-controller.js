@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-
+import "dotenv/config"
+import jwt from "jsonwebtoken"
 const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
@@ -18,10 +19,13 @@ export const createProduct = async (req, res) => {
 
   const { name, descripcion, imagen, stock, precio, genero, idCategoria, talle} = req.body;
 
+  const token = req.headers.authorization;
 
   if(!name || !descripcion || !stock || !precio || !genero || !imagen || !talle){
    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
+
+  const data = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
   const nombre = name.toLowerCase();
 
@@ -38,6 +42,7 @@ export const createProduct = async (req, res) => {
         stock,
         talle,
         precio,
+        idUser: data.id,
         genero,
         categorias: { connect: { id: idCategoria } },
       },
@@ -51,7 +56,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const getProductByName = async (req, res) => {
-  const { nombre } = req.body;
+  const nombre = req.params.name;
 
   if (!nombre){
    return res.status(400).json({ error: "Faltan parametros 'nombre' " });
@@ -69,30 +74,33 @@ export const getProductByName = async (req, res) => {
     res.status(200).json(prendas);
 
   }catch(error){
-    res.status(500).json({ message: "error al buscar la prenda" });
+    res.status(500).json({ error: "error al buscar la prenda" });
   }
 
 }
 
 export const categoryFilter = async (req, res) => {
-  try {
-    const { id } = req.body; // Recibe el parámetro de consulta "categoria"
+  const categoriaId = parseInt(req.params.id);
+  const genero = req.params.genero;
 
-    if (!id) {
-      return res.status(400).json({ error: 'Debes proporcionar una categoría.' });
-    }
+  if(!genero || !categoriaId){
+    return res.status(400).json({message: "faltan parametros"})
+  }
+  try {
 
     const prendas = await prisma.prenda.findMany({
       where: {
-        categorias: {
-          some: {
-            id: id, // Filtra por nombre de categoría
+        genero: genero,
+        categorias:{
+          some:{
+            id: categoriaId,
           },
-        },
+        }
       },
     });
-  
-    return res.json(prendas);
+
+    
+    res.status(200).json(prendas);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Ocurrió un error al obtener las prendas.' });
@@ -136,7 +144,7 @@ export const deleteProductById = async (req, res) => {
 
 export const getProductByGenero = async (req, res) =>{
   try {
-    const { genero } = req.body; // Obtener el género del query param
+    const genero = req.params.genero; // Obtener el género del query param
 
     if (!genero) {
       return res.status(400).json({ error: 'El parámetro género es requerido' });
@@ -155,3 +163,50 @@ export const getProductByGenero = async (req, res) =>{
     res.status(500).json({ error: 'Error al buscar prendas por género' });
   }
 }
+
+export const getUserProductos = async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token){
+    return res.status(401).json({ message: "Token Faltante"})
+  }
+
+  try{
+    const data = jwt.verify(token,  process.env.JWT_ACCESS_SECRET);
+
+    const product= await prisma.Prenda.findMany({
+      where: {
+        idUser: data.id,
+      },
+    });
+
+    if(!product){
+      return res.status(404).json({message:"El usuario no tiene productos"})
+    }
+
+    res.status(201).json(product)
+  }catch(error){
+    res.status(500).json({error: "error al buscar la información"});
+  }
+}
+
+export const getProductById = async (req, res) => {
+  const productId = parseInt(req.params.id);
+
+  try {
+    const producto = await prisma.Prenda.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!producto) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    res.status(200).json(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'No se a logrado encontrar el producto' });
+  }
+};

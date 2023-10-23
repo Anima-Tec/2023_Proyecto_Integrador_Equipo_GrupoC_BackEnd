@@ -2,7 +2,7 @@ import express from "express";
 import { getUserByName, getUsers, logIn } from "../controllers/users-controller.js";
 import { createUser } from "../controllers/users-controller.js";
 import { getUserProfile } from "../controllers/users-controller.js";
-import { allCategorys, categoryFilter, deleteProductById, getProductByGenero, getProductByName, getProducts } from "../controllers/products-controller.js";
+import { allCategorys, categoryFilter, deleteProductById, getProductByGenero, getProductById, getProductByName, getProducts, getUserProductos } from "../controllers/products-controller.js";
 import { createProduct } from "../controllers/products-controller.js";
 import { deleteUserById } from "../controllers/users-controller.js";
 import { createComment } from "../controllers/comments-controller.js";
@@ -19,18 +19,20 @@ router.post("/user/logIn", logIn)
 router.post("/user/singIn", createUser);
 router.get("/users/profile", getUserProfile);
 router.get("/users", verifyToken, getUsers);
-router.get("/user/name",verifyToken, getUserByName)
-router.delete("/user/:id",verifyToken ,deleteUserById);
+router.get("/user/name/:name",verifyToken, getUserByName)
+router.delete("/userOnly/:id",verifyToken ,deleteUserById);
 
 // Rutas de products-controllers
 
 router.get("/products", getProducts);
 router.post("/product",verifyToken , createProduct);
-router.get("/productName", getProductByName)
-router.get("/product/cat", categoryFilter);
+router.get("/productName/:name", getProductByName)
+router.get("/product/cat/:id/:genero", categoryFilter);
 router.get("/category", allCategorys);
 router.delete("/product/:id", verifyToken, deleteProductById);
-router.get("/product/genero", getProductByGenero)
+router.get("/product/genero/:genero", getProductByGenero);
+router.get("/product/profile", verifyToken ,getUserProductos);
+router.get("/productOnly/:id", getProductById)
 
 // Rutas de comment-controller y article-controller
 
