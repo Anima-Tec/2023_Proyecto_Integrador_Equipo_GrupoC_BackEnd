@@ -135,7 +135,7 @@ export const logIn = async (req, res) => {
 };
 
 export const getUserByName = async (req, res) =>{
-  const { name } = req.body;
+  const { name } = req.params;
   
   if (!name) {
     return res.status(400).json({ mensaje: 'El parámetro "nombre" es obligatorio' });
@@ -158,4 +158,28 @@ export const getUserByName = async (req, res) =>{
   }
 
 }
+
+export const getUserById = async (req, res) => {
+  const { id } = req.params
+
+  if(!id){
+    return res.status(400).json({message: "Faltan parametros"})
+  }
+
+  try{
+    const user = await prisma.User.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if(!user){
+      return res.status(404).json({message: "Usuario no encontrado"})
+    }
+
+    res.status(200).json({name: user.name, surname: user.surname, email: user.email, edad: user.edad})
+  }catch(error){
+    res.status(500).json({error: "No se a logrado obteener el usuario"})
+  }
+};
 

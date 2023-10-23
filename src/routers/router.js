@@ -19,8 +19,8 @@ router.post("/user/logIn", logIn)
 router.post("/user/singIn", createUser);
 router.get("/users/profile", getUserProfile);
 router.get("/users", verifyToken, getUsers);
-router.get("/user/name",verifyToken, getUserByName)
-router.delete("/user/:id",verifyToken ,deleteUserById);
+router.get("/user/name/:name",verifyToken, getUserByName)
+router.delete("/userOnly/:id",verifyToken ,deleteUserById);
 
 // Rutas de products-controllers
 
