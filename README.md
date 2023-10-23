@@ -40,4 +40,11 @@ Cabe resaltar que este proyecto esta utilizando el lenguaje de MySQL, si utiliza
 _PostgreSQL: postgresql://`USER`:`` PASSWORD`@`HOST`:`PORT ``/`DATABASE-NAME`_
 _MongoDB: mongodb://`USER`:`PASSWORD`@`HOST`/`DATABASE-NAME`_
 
+-----
+## Deploy en producción
+-----
+1. _Para empezar con el deploy a producción ya deberian estar realizado los paso de instalación_
+2. _En el archivo `.env` deberemos crear una variable llamada `NODE_ENV` a la misma le asignaremos el valor de `production`_
+3. _Después dentro de la carpeta prisma usaremos el comando `npx prisma migrate deploy`_
+4. _Después de haber realizado el comando volveremos a la carpeta del proyecto y utilizaremos el comando `NODE_ENV=production node app.js`_
 
