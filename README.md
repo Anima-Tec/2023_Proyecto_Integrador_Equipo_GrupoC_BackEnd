@@ -32,6 +32,18 @@ En este proyecto se utiliza [Prisma](https://www.prisma.io/) como ORM Y aquí se
 5. _Estando adentro de esa carpete utilizaremos el siguiente comando `npx prisma generate`_
 6. _Después de ejecutar ese comando ejecutaremos el siguiente comando `npx prisma db push`_
 7. _Después de terminar este proceso confirmaremos que todo salio correctamente entrando en MySQL workbeanch, revisaremos si la database y sus tablas se crearon correctamente_
+8. _Dentro de MySQL workbeanch usaremos los siguientes inserts `
+use "nombre-de-la-DB"
+INSERT INTO Categoria (id,nombre) VALUES (1,'remeras');
+INSERT INTO Categoria (id,nombre) VALUES (2,'camisas');
+INSERT INTO Categoria (id,nombre) VALUES (3,'buzos');
+INSERT INTO Categoria (id,nombre) VALUES (4,'camperas y abrigos');
+INSERT INTO Categoria (id,nombre) VALUES (5,'pantalones');
+INSERT INTO Categoria (id,nombre) VALUES (6,'shorts');
+INSERT INTO Categoria (id,nombre) VALUES (7,'jeans');
+INSERT INTO Categoria (id,nombre) VALUES (8,'pijamas');
+INSERT INTO Categoria (id,nombre) VALUES (9,'vestidos');
+INSERT INTO Categoria (id,nombre) VALUES (10,'faldas y polleras');`_
 
 Como se dijo en el paso "2." la URL dependera de que servicio de BDD que usemos a continuación hay ejemplos de otras URL.
 En este [LINK](https://www.prisma.io/docs/reference/database-reference/connection-urls) se encuetran las demás URL en prisma.
@@ -39,6 +51,7 @@ Cabe resaltar que este proyecto esta utilizando el lenguaje de MySQL, si utiliza
 
 _PostgreSQL: postgresql://`USER`:`` PASSWORD`@`HOST`:`PORT ``/`DATABASE-NAME`_
 _MongoDB: mongodb://`USER`:`PASSWORD`@`HOST`/`DATABASE-NAME`_
+
 
 -----
 ## Deploy en producción
