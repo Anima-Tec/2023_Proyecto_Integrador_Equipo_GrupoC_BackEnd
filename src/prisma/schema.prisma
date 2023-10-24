@@ -11,23 +11,27 @@ model User {
   id     Int  @id @default(autoincrement())
   name     String
   surname  String
+  imagen String
   email    String   @unique
   contrasena String
-  edad Int 
-  celular Int 
+  edad String
+  celular String 
 
   compras Compra[]
   ventas Vende[]
-  donaciones Dona[]
 }
 
 model Prenda {
   id Int @id @default(autoincrement())
   nombre String
   descripcion String
+  imagen String
   stock Int
+  talle String
   precio Float
-
+  idUser Int
+  genero String
+  
   compras Compra[]
   ventas Vende[]
   categorias Categoria[]
@@ -41,16 +45,15 @@ model Comment {
 
 model Articulo{
   id Int @id @default(autoincrement())
+  name String 
   descripcion String
-
-  donaciones Dona[]
+  lugar_retiro String
 }
 
 model Categoria{
   id Int @id @default(autoincrement())
   nombre String
-  prenda Prenda @relation(fields: [idPrenda], references: id)
-  idPrenda Int
+  prenda Prenda[]
 }
 
 model Compra {
@@ -73,14 +76,4 @@ model Vende {
 
   user User @relation(fields: [idUser], references: id)
   prenda Prenda @relation(fields: [idPrenda], references: id)
-}
-
-model Dona{
-  id Int @id @default(autoincrement())
-  fecha DateTime
-  idUser Int @unique
-  idArticulo Int @unique
-
-  user User @relation(fields: [idUser], references: id)
-  articulo Articulo @relation(fields: [idArticulo], references: id)
 }
