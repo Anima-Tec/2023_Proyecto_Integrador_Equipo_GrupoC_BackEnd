@@ -5,30 +5,36 @@ const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
   try {
-
+    // Busca todos los objetos existentes de la tabla Prenda 
     const products = await prisma.Prenda.findMany();
+
+    // Devuelve el objeto creado con el estado de succefull
     res.status(200).json(products);
 
   } catch (error) {
+    // Contrala si hubo un error en inesperado en el servidor
     res.status(500).json({ error: "No se a logrado conseguir la información" });
   }
 };
 
 export const createProduct = async (req, res) => {
-
-
+  // Realiza una requeste de un body/json con las variables necesarias
   const { name, descripcion, imagen, stock, precio, genero, idCategoria, talle} = req.body;
 
+  // Toma el token del usuario
   const token = req.headers.authorization;
 
+  // Comprueba que las variables necesarias se hayan llegado correctamente
   if(!name || !descripcion || !stock || !precio || !genero || !imagen || !talle){
    return res.status(400).json({ error: "Todos los campos son requeridos" });
   }
 
+  // Verifica el token y toma la información del mismo
   const data = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
   const nombre = name.toLowerCase();
 
+  // Comprueba que stock no sea menor a 0
   if(stock < 1 ){
     return res.status(400).json({ error: "Stock debe ser mayor a '0'" });
   }
@@ -42,38 +48,46 @@ export const createProduct = async (req, res) => {
         stock,
         talle,
         precio,
-        idUser: data.id,
+        idUser: data.id, // Toma la información obtenida del token y lo asigna a objeto
         genero,
-        categorias: { connect: { id: idCategoria } },
+        categorias: { connect: { id: idCategoria } } // Lo relaciona con una id que existe en categoria,
       },
     });
 
+    // Devuelve el objeto creado con el estado de succefull
     res.status(201).json(newProduct);
 
    } catch (error) {
+     // Contrala si hubo un error en inesperado en el servidor
     res.status(500).json({ error: "No se a logrado crear el producto" });
    }
 };
 
 export const getProductByName = async (req, res) => {
+  // Realiza una request através de parametros un string llamado name
   const nombre = req.params.name;
 
+  // Comprueba que los datos hayan llegao correctamente
   if (!nombre){
    return res.status(400).json({ error: "Faltan parametros 'nombre' " });
   }
 
   try{
+    // Solicita a prisma que busque los objetos con nombre similar en la tabla Prenda
     const prendas = await prisma.Prenda.findMany({
       where: { nombre: { contains: nombre.toLowerCase() } },
     });
 
+    // Controla si se encontro una prenda con ese nombre
     if (!prendas){
       return res.status(404).json({ message: "No sean encontrado prendas"});
     }
 
+    // Devuelve el objeto creado con el estado de succefull
     res.status(200).json(prendas);
 
   }catch(error){
+     // Contra si hubo un error en inesperado en el servidor
     res.status(500).json({ error: "error al buscar la prenda" });
   }
 

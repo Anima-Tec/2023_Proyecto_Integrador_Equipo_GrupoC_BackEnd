@@ -53,6 +53,7 @@ model Articulo{
 model Categoria{
   id Int @id @default(autoincrement())
   nombre String
+  
   prenda Prenda[]
 }
 
