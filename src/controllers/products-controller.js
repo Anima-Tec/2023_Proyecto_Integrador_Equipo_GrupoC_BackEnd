@@ -101,7 +101,7 @@ export const categoryFilter = async (req, res) => {
     return res.status(400).json({message: "faltan parametros"})
   }
   try {
-
+    
     const prendas = await prisma.prenda.findMany({
       where: {
         genero: genero,
